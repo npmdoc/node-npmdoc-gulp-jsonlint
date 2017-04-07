@@ -1,0 +1,243 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/rogeriopvl/gulp-jsonlint"
+
+    >gulp-jsonlint (v1.2.0)</a>
+</h1>
+<h4>A jsonlint plugin for Gulp</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-jsonlint">module gulp-jsonlint</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jsonlint.failAfterError">
+            function <span class="apidocSignatureSpan">gulp-jsonlint.</span>failAfterError
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jsonlint.failOnError">
+            function <span class="apidocSignatureSpan">gulp-jsonlint.</span>failOnError
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jsonlint.reporter">
+            function <span class="apidocSignatureSpan">gulp-jsonlint.</span>reporter
+            <span class="apidocSignatureSpan">(customReporter)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-jsonlint" id="apidoc.module.gulp-jsonlint">module gulp-jsonlint</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jsonlint.failAfterError" id="apidoc.element.gulp-jsonlint.failAfterError">
+        function <span class="apidocSignatureSpan">gulp-jsonlint.</span>failAfterError
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">failAfterError = function () {
+    var errorCount = 0;
+
+    return through.obj(function (file, enc, cb) {
+        errorCount += file.jsonlint.success === false
+
+        cb(null, file);
+
+    }, function (cb) {
+        if (errorCount &#x3e; 0) {
+            this.emit(&#x27;error&#x27;, new PluginError(
+                &#x27;gulp-jsonlint&#x27;,
+                {
+                    name: &#x27;JSONLintError&#x27;,
+                    message: &#x27;Failed with &#x27; + errorCount +
+                        (errorCount === 1 ? &#x27; error&#x27; : &#x27; errors&#x27;)
+                }
+            ));
+        }
+
+        cb();
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// Cause the stream to stop(/fail) before copying an invalid JS file to the output directory
+gulp.src(&#x27;**/*.js&#x27;)
+	.pipe(jsonlint())
+	.pipe(jsonlint.failOnError())
+	.pipe(gulp.dest(&#x27;../output&#x27;));
+```
+
+### jsonlint.<span class="apidocCodeKeywordSpan">failAfterError</span>()
+
+Stop a task/stream if an jsonlint error has been reported for any file, but wait for all of them to be processed first.
+
+## License
+
+[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jsonlint.failOnError" id="apidoc.element.gulp-jsonlint.failOnError">
+        function <span class="apidocSignatureSpan">gulp-jsonlint.</span>failOnError
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">failOnError = function () {
+
+    return through.obj(function (file, enc, cb) {
+        if (file.jsonlint.success === false) {
+            var error = new PluginError(
+                    &#x27;gulp-jsonlint&#x27;,
+                    {
+                        name: &#x27;JSONLintError&#x27;,
+                        filename: file.path,
+                        message: file.jsonlint.message,
+                    }
+                );
+        }
+
+        return cb(error, file);
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+##### file
+
+Type: `object`
+
+This argument has the attribute `jsonlint` wich is an object that contains a `success` boolean attribute. If it&#x27;s false you
+ also have a `message` attribute containing the jsonlint error message.
+
+### jsonlint.<span class="apidocCodeKeywordSpan">failOnError</span>()
+
+Stop a task/stream if an jsonlint error has been reported for any file.
+
+```javascript
+// Cause the stream to stop(/fail) before copying an invalid JS file to the output directory
+gulp.src(&#x27;**/*.js&#x27;)
+	.pipe(jsonlint())
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jsonlint.reporter" id="apidoc.element.gulp-jsonlint.reporter">
+        function <span class="apidocSignatureSpan">gulp-jsonlint.</span>reporter
+        <span class="apidocSignatureSpan">(customReporter)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">reporter = function (customReporter) {
+    var reporter = defaultReporter;
+
+    if (typeof customReporter === &#x27;function&#x27;) {
+        reporter = customReporter;
+    }
+
+    return mapStream(function (file, cb) {
+        if (file.jsonlint &#x26;&#x26; !file.jsonlint.success) {
+            reporter(file);
+        }
+        return cb(null, file);
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+Then, add it to your `gulpfile.js`:
+
+```javascript
+var jsonlint = require(&#x22;gulp-jsonlint&#x22;);
+
+gulp.src(&#x22;./src/*.json&#x22;)
+    .pipe(jsonlint())
+    .pipe(jsonlint.<span class="apidocCodeKeywordSpan">reporter</span>());
+```
+
+Using a custom reporter:
+
+```javascript
+var jsonlint = require(&#x27;gulp-jsonlint&#x27;);
+var gutil = require(&#x27;gulp-util&#x27;);
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
