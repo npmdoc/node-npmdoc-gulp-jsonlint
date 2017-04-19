@@ -56,6 +56,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jsonlint.gulp-jsonlint">
+            function <span class="apidocSignatureSpan"></span>gulp-jsonlint
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.gulp-jsonlint.failAfterError">
             function <span class="apidocSignatureSpan">gulp-jsonlint.</span>failAfterError
             <span class="apidocSignatureSpan">()</span>
@@ -87,6 +96,35 @@
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-jsonlint" id="apidoc.module.gulp-jsonlint">module gulp-jsonlint</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jsonlint.gulp-jsonlint" id="apidoc.element.gulp-jsonlint.gulp-jsonlint">
+        function <span class="apidocSignatureSpan"></span>gulp-jsonlint
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-jsonlint = function (options) {
+    options = options || {};
+
+    return mapStream(function (file, cb) {
+        var errorMessage = '';
+
+        try {
+            jsonlint.parse(String(file.contents));
+        }
+        catch (err) {
+            errorMessage = err.message;
+        }
+        file.jsonlint = formatOutput(errorMessage);
+
+        cb(null, file);
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
